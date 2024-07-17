@@ -12,7 +12,7 @@ class PlayerViewSet(viewsets.ViewSet):
     def list(self, request):
         players = Player.objects.all()
         serializer = PlayerSerializer(players, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = PlayerSerializer(data=request.data)
