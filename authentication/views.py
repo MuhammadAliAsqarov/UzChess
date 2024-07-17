@@ -25,12 +25,6 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
-        manual_parameters=[
-            openapi.Parameter('username', openapi.IN_FORM, description="Username of the user", type=openapi.TYPE_STRING,
-                              required=True),
-            openapi.Parameter('password', openapi.IN_FORM, description="Password of the user", type=openapi.TYPE_STRING,
-                              required=True)
-        ],
         responses={
             200: openapi.Response(
                 description="Login successful",

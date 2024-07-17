@@ -15,7 +15,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title="UzChess APIv1",
         default_version="v1",
-        description="API for UzChess project",
+        description="API documentation for Chess Tournament Management System",
         terms_of_service="",
         contact=openapi.Contact(email="fsp_noname_py@gmail.com"),
         license=openapi.License(name="BSD License"),
