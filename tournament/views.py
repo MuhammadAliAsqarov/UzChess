@@ -12,7 +12,7 @@ class PlayerViewSet(viewsets.ViewSet):
     def list(self, request):
         players = Player.objects.all()
         serializer = PlayerSerializer(players, many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         serializer = PlayerSerializer(data=request.data)
@@ -21,23 +21,29 @@ class PlayerViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
-        player = get_object_or_404(Player, pk=pk)
-        serializer = PlayerSerializer(player)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def retrieve(self, request, pk):
+        player = Player.objects.get(pk=pk)
+        if player:
+            serializer = PlayerSerializer(player)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(data={'message': 'Player not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
 
     def update(self, request, pk=None):
-        player = get_object_or_404(Player, pk=pk)
+        player = Player.objects.get(pk=pk)
+        if player is None:
+            return Response(data={'message': 'Player not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         serializer = PlayerSerializer(player, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk=None):
-        player = get_object_or_404(Player, pk=pk)
+    def destroy(self, request, pk):
+        player = Player.objects.get(pk=pk)
+        if player is None:
+            return Response(data={'message': 'Player not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         player.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={'message': 'Player deleted successfully', 'ok': True}, status=status.HTTP_204_NO_CONTENT)
 
 
 class TournamentViewSet(viewsets.ViewSet):
@@ -55,13 +61,17 @@ class TournamentViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
-        tournament = get_object_or_404(Tournament, pk=pk)
+    def retrieve(self, request, pk):
+        tournament = Tournament.objects.get(pk=pk)
+        if tournament is None:
+            return Response(data={'message': 'Tournament not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         serializer = TournamentSerializer(tournament)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
-        tournament = get_object_or_404(Tournament, pk=pk)
+        tournament = Tournament.objects.get(pk=pk)
+        if tournament is None:
+            return Response(data={'message': 'Tournament not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         serializer = TournamentSerializer(tournament, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -69,9 +79,12 @@ class TournamentViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        tournament = get_object_or_404(Tournament, pk=pk)
+        tournament = Tournament.objects.get(pk=pk)
+        if tournament is None:
+            return Response(data={'message': 'Tournament not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         tournament.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={'message': 'Tournament deleted successfully', 'ok': True},
+                        status=status.HTTP_204_NO_CONTENT)
 
 
 class MatchViewSet(viewsets.ViewSet):
@@ -89,13 +102,17 @@ class MatchViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def retrieve(self, request, pk=None):
-        match = get_object_or_404(Match, pk=pk)
+    def retrieve(self, request, pk):
+        match = Match.objects.get(pk=pk)
+        if match is None:
+            return Response(data={'message': 'Match not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         serializer = MatchSerializer(match)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
-        match = get_object_or_404(Match, pk=pk)
+        match = Match.objects.get(pk=pk)
+        if match is None:
+            return Response(data={'message': 'Match not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         serializer = MatchSerializer(match, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -103,6 +120,8 @@ class MatchViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        match = get_object_or_404(Match, pk=pk)
+        match = Match.objects.get(pk=pk)
+        if match is None:
+            return Response(data={'message': 'Match not found', 'ok': False}, status=status.HTTP_404_NOT_FOUND)
         match.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(data={'message': 'Match deleted successfully', 'ok': True}, status=status.HTTP_204_NO_CONTENT)
